@@ -2,8 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Hello World</title>
-    <!-- Add some CSS to change client UI -->
+    <title>Test Pooling Simulator</title>
     <style>
     body {
         background-color: #232F3E;
@@ -22,22 +21,20 @@
         }
     </style>
     <script>
-        // define the callAPI function that takes a first name and last name as parameters
-        var callAPI = (PopulationSize)=>{
-            // instantiate a headers object
+        var callAPI = (PopulationSize, BasePrevalence, TestSens, TestSpec)=>{
             var myHeaders = new Headers();
-            // add content type header to object
             myHeaders.append("Content-Type", "application/json");
-            // using built in JSON utility package turn object to string and store in a variable
-            var raw = JSON.stringify({"PopulationSize":PopulationSize});
-            // create a JSON object with parameters for API call and store in a variable
+            var raw = JSON.stringify({"PopulationSize": PopulationSize,
+                                      "BasePrevalence": BasePrevalence, 
+                                      "TestSensitivity":TestSens,
+                                      "TestSpecificity":TestSpec});
             var requestOptions = {
                 method: 'POST',
                 headers: myHeaders,
                 body: raw,
                 redirect: 'follow'
             };
-            // make API call with parameters and use promises to get response
+
             fetch("https://y8lwxgq0nh.execute-api.us-east-1.amazonaws.com/Dev", requestOptions)
             .then(response => response.text())
             .then(result => alert(JSON.parse(result).body))
@@ -53,6 +50,9 @@
         <label>Population Size :</label>
         <input type="number" id="pSize">
         <br>
+        <label>Base Prevalence:</label>
+        <input type="number" id="bPrevalence">
+        <br>
         <label>Test Sensitivity (% ; 0-100):</label>
         <input type="Number" id="testSens">
         <br>
@@ -60,7 +60,10 @@
         <input type="Number" id="testSpec">
         <br>
         <!-- set button onClick method to call function we defined passing input values as parameters -->
-        <button type="button" onclick="callAPI(document.getElementById('pSize').value)">Call API</button>
+        <button type="button" onclick="callAPI(document.getElementById('pSize').value, 
+                                               document.getElementById('bPrevalence').value,
+                                               document.getElementById('testSens').value,
+                                               document.getElementById('testSpec').value,)">Call API</button>
     </form>
 </body>
 </html>
