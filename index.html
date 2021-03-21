@@ -34,10 +34,13 @@
                 body: raw,
                 redirect: 'follow'
             };
-
+        var replaceOptimalParams = (responseData) => {
+            $('#poolSize').replaceWith('<div class="poolSize"> Cost minimizing pool size:' + responseData.MinTestGroupSize.SubgroupSize + '</div>')
+            $('#E_tests').replaceWith('<div id = "E_tests"> Expected Number of tests: ' + responseData.MinTestGroupSize.ExpectedNumberTests +  '</div>'
+        }
             fetch("https://y8lwxgq0nh.execute-api.us-east-1.amazonaws.com/Dev", requestOptions)
-            .then(response => response.text())
-            .then(result => alert(JSON.parse(result).body))
+            .then(response => response.json())
+            .then(replaceOptimalParams)
             .catch(error => console.log('error', error));
         }
     </script>
@@ -65,5 +68,9 @@
                                                document.getElementById('testSens').value,
                                                document.getElementById('testSpec').value,)">Call API</button>
     </form>
+    <br>
+    <div id = "poolSize"> Cost minimizing pool size: </div>
+    <br>
+    <div id = "E_tests"> Expected Number of tests: </div>
 </body>
 </html>
